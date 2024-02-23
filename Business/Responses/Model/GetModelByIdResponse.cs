@@ -1,4 +1,4 @@
-﻿namespace Business.Responses.Model;
+﻿namespace Business;
 
 public class GetModelByIdResponse
 {

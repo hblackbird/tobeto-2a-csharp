@@ -1,34 +1,54 @@
-﻿using Core.CrossCuttingConcerns.Exceptions;
+﻿using Azure.Core;
+using Business.Abstract;
+using Business.Dtos.Model;
+using Core.CrossCuttingConcerns.Exceptions;
 using DataAccess.Abstract;
 using Entities.Concrete;
-
 namespace Business.BusinessRules;
 
 public class ModelBusinessRules
 {
     private readonly IModelDal _modelDal;
+    private readonly IBrandService _brandService;
 
-    public ModelBusinessRules(IModelDal modelDal)
+    public ModelBusinessRules(IModelDal modelDal,IBrandService brandService)
     {
         _modelDal = modelDal;
+        _brandService = brandService;
     }
 
-    public void CheckIfModelNameExists(string name)
+    public void CheckIfModelNameIsValid(string Name)
     {
-        bool isNameExists = _modelDal.Get(m => m.Name == name) != null;
-        if (isNameExists)
-            throw new BusinessException("Model name already exists.");
+        if (Name.Length < 2)
+        {
+            throw new BusinessException("Model name must be at least 2 characters long.");
+        }
+    }
+    public  void CheckIfDailyPriceIsValid(decimal dailyPrice)
+    {
+        if (dailyPrice <= 0)
+        {
+            throw new BusinessException("Daily price must be greater than 0.");
+        }
     }
 
-    public void CheckIfModelExists(Model? model)
+    public Model FindId(int id)
     {
-        if (model is null)
-            throw new NotFoundException("Model not found.");
+        Model model = _modelDal.GetList().Where(a => a.Id == id).FirstOrDefault();
+        return model;
     }
-
-    public void CheckIfModelYearShouldBeInLast20Years(short year)
+    public void CheckIfModelNoExists(int id)
     {
-        if (year < DateTime.UtcNow.AddYears(-20).Year)
-            throw new BusinessException("Model year should be in last 20 years.");
+        bool isExists = _modelDal.GetList().Any(a => a.Id == id);
+        if (!isExists)
+        {
+            throw new BusinessException("This id not found");
+        }
+    }
+    public void CheckIfBrandNameExists(int brandId)
+    {
+        Brand? brand = _brandService.GetById(brandId);
+        if (brand is null)
+            throw new Exception("Marka bulunamadı");
     }
 }

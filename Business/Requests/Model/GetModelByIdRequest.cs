@@ -1,4 +1,4 @@
-﻿namespace Business.Requests.Model;
+﻿namespace Business;
 
 public class GetModelByIdRequest
 {

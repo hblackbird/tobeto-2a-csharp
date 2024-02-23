@@ -5,13 +5,11 @@ namespace Business.Abstract;
 
 public interface IModelService
 {
-    public GetModelListResponse GetList(GetModelListRequest request);
+    public AddModelResponse Add(AddModelRequest request);
+    public DeleteModelResponse Delete(DeleteModelRequest request);
+    public UpdateModelResponse Update(int id, UpdateModelRequest request);
 
     public GetModelByIdResponse GetById(GetModelByIdRequest request);
+    public GetModelListResponse GetList(GetModelListRequest request);
 
-    public AddModelResponse Add(AddModelRequest request);
-
-    public UpdateModelResponse Update(UpdateModelRequest request);
-
-    public DeleteModelResponse Delete(DeleteModelRequest request);
 }

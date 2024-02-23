@@ -19,5 +19,11 @@ public class BrandMapperProfiles : Profile
                 destinationMember: dest => dest.Items,
                 memberOptions: opt => opt.MapFrom(mapExpression: src => src)
             );
+        CreateMap<DeleteBrandRequest, Brand>();
+        CreateMap<Brand, DeleteBrandResponse>()
+           .ForMember(dest => dest.DeletedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
+        CreateMap<UpdateBrandRequest, Brand>();
+        CreateMap<Brand, UpdateBrandResponse>()
+           .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
     }
 }

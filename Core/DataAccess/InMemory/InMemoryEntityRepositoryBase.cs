@@ -6,7 +6,7 @@ public abstract class InMemoryEntityRepositoryBase<TEntity, TEntityId>
     : IEntityRepository<TEntity, TEntityId>
     where TEntity : class, IEntity<TEntityId>, new()
 {
-    protected readonly HashSet<TEntity> Entities = new();
+    protected readonly HashSet<TEntity> _entities = new();
 
     protected abstract TEntityId generateId();
 
@@ -14,28 +14,26 @@ public abstract class InMemoryEntityRepositoryBase<TEntity, TEntityId>
     {
         entity.Id = generateId();
         entity.CreatedAt = DateTime.UtcNow;
-        Entities.Add(entity);
+        _entities.Add(entity);
         return entity;
     }
 
-    public TEntity Delete(TEntity entity, bool isSoftDelete = true)
+    public TEntity Delete(TEntity entity)
     {
-        entity.DeletedAt = DateTime.UtcNow; // Soft delete
-        if (!isSoftDelete)
-            Entities.Remove(entity); // Hard delete
-
+        entity.DeletedAt = DateTime.UtcNow;
+        _entities.Remove(entity);
         return entity;
     }
 
     public TEntity? Get(Func<TEntity, bool> predicate)
     {
-        TEntity? entity = Entities.FirstOrDefault(predicate);
+        TEntity? entity = _entities.FirstOrDefault(predicate);
         return entity;
     }
 
     public IList<TEntity> GetList(Func<TEntity, bool>? predicate = null)
     {
-        IEnumerable<TEntity> query = Entities;
+        IEnumerable<TEntity> query = _entities;
 
         if (predicate is not null)
             query = query.Where(predicate);

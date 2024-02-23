@@ -1,4 +1,4 @@
-﻿namespace Business;
+﻿namespace Business.Dtos.Model;
 
 public class ModelListItemDto
 {

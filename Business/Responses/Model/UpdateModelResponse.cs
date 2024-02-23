@@ -10,4 +10,19 @@ public class UpdateModelResponse
     public short Year { get; set; }
     public decimal DailyPrice { get; set; }
     public DateTime UpdatedAt { get; set; }
+
+    public UpdateModelResponse(int id, int brandId, int fuelId, int transmissionId, string name, short year, decimal dailyPrice, DateTime updatedAt)
+    {
+        Id = id;
+        BrandId = brandId;
+        FuelId = fuelId;
+        TransmissionId = transmissionId;
+        Name = name;
+        Year = year;
+        DailyPrice = dailyPrice;
+        UpdatedAt = updatedAt;
+    }
+
+
+    public UpdateModelResponse() { }
 }
