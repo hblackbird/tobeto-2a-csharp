@@ -6,6 +6,8 @@ using Business.Responses.Brand;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
+using System.Security.Claims;
 
 namespace Business.Concrete;
 
@@ -26,7 +28,15 @@ public class BrandManager : IBrandService
 
     public AddBrandResponse Add(AddBrandRequest request)
     {
+        var roleClaim = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Rol");
+        if (roleClaim.Value is not null)
+        {
+            string roleValue = roleClaim.Value;
+            if(roleValue != "1") {
+                throw new Exception("Bunun için yetkin yok.");
+            }
 
+        }
         if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
         {
             throw new Exception("Bu endpointi çalıştırmak için giriş yapmak zorundasınız!");

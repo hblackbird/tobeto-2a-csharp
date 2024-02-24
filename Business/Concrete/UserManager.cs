@@ -74,9 +74,10 @@ public class UserManager : IUserService
     public AccessToken Login(LoginRequest request)
     {
         User? user = _userDal.Get(i=> i.Email == request.Email);
+        int role = (int)user.RoleId;
         bool isPasswordCorrect = HashingHelper.VerifyPassword(request.Password, user.PasswordHash, user.PasswordSalt);
         if (!isPasswordCorrect)
             throw new Exception("Sifre Yanlis");
-        return _tokenHelper.CreateToken(user);
+        return _tokenHelper.CreateToken(user,role);
     }
 }

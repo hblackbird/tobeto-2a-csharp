@@ -13,6 +13,8 @@ namespace Core.Entities
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public bool Approved { get; set; }
+        public int? RoleId {  get; set; }
+        public ICollection<UserRole> UserRoles { get; set; }
         public User()
         {
         }

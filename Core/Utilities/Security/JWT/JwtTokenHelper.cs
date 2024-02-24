@@ -18,18 +18,23 @@ namespace Core.Utilities.Security.JWT
             _tokenOptions = _configuration.GetSection("TokenOptions").Get<TokenOptions>();
         }
 
-        public AccessToken CreateToken(User user)
+        public AccessToken CreateToken(User user, int r)
         {
             // TODO: Refactor
             DateTime expirationTime = DateTime.Now.AddMinutes(_tokenOptions.ExpirationTime);
             SecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenOptions.SecurityKey));
             SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
+            Claim[] claims = new[]
+            {
+                new Claim("Rol", r.ToString(), ClaimValueTypes.Integer)
+            };
             JwtSecurityToken jwt = new JwtSecurityToken(
                  issuer: _tokenOptions.Issuer,
                  audience: _tokenOptions.Audience,
                  expires: expirationTime,
                  signingCredentials: signingCredentials,
-                 notBefore: DateTime.Now
+                 notBefore: DateTime.Now,
+                 claims: claims
                 );
 
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
