@@ -80,6 +80,16 @@ public class BrandManager : IBrandService
 
     public UpdateBrandResponse Update(int id, UpdateBrandRequest request)
     {
+        var roleClaim = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Rol");
+        if (roleClaim.Value is not null)
+        {
+            string roleValue = roleClaim.Value;
+            if (roleValue != "1")
+            {
+                throw new Exception("Bunun için yetkin yok.");
+            }
+
+        }
         Brand existingBrand = _brandDal.Get(a => a.Id == id);
         if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
         {
